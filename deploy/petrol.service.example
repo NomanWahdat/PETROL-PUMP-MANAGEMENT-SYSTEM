@@ -1,0 +1,18 @@
+[Unit]
+Description=Petrol station Django API
+After=network.target
+
+[Service]
+User=petrol
+Group=petrol
+WorkingDirectory=/srv/petrol/backend
+EnvironmentFile=/etc/petrol.env
+ExecStart=/srv/petrol/.venv/bin/gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 3 --timeout 60 --access-logfile - --error-logfile -
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

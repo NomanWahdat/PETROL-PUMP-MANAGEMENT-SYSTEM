@@ -1,0 +1,34 @@
+# Demo hosting only. Existing deploy/ VPS templates remain available.
+services:
+  - type: web
+    name: petrol-pump-demo-api
+    runtime: python
+    plan: free
+    buildCommand: bash deploy/render-build.sh
+    startCommand: bash deploy/render-start.sh
+    healthCheckPath: /api/v1/ready/
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: USE_SQLITE
+        value: "false"
+      - key: DJANGO_LOGO_STORAGE
+        value: database
+      - key: DJANGO_CACHE_BACKEND
+        value: database
+      - key: DJANGO_CACHE_LOCATION
+        value: petrol_cache
+      - key: DJANGO_TIME_ZONE
+        value: Asia/Kabul
+      - key: DJANGO_TRUST_PROXY_SSL
+        value: "true"
+      - key: DJANGO_NUM_PROXIES
+        value: "0"
+      - key: DJANGO_DISABLE_SERVER_SIDE_CURSORS
+        value: "true"
