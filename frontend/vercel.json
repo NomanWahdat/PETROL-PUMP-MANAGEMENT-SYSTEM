@@ -4,20 +4,26 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "https://petrol-pump-demo-api.onrender.com/api/:path*" },
-    { "source": "/admin/:path*", "destination": "https://petrol-pump-demo-api.onrender.com/admin/:path*" },
-    { "source": "/static/:path*", "destination": "https://petrol-pump-demo-api.onrender.com/static/:path*" },
-    { "source": "/media/:path*", "destination": "https://petrol-pump-demo-api.onrender.com/media/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "headers": [
-    { "source": "/api/:path*", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/admin/:path*", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/(.*)", "headers": [
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "X-Frame-Options", "value": "DENY" },
-      { "key": "Referrer-Policy", "value": "same-origin" }
-    ] }
+  "routes": [
+    {
+      "src": "/(.*)",
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "same-origin"
+      },
+      "continue": true
+    },
+    {
+      "src": "/(api|admin)(/.*)?",
+      "headers": { "Cache-Control": "no-store" },
+      "continue": true
+    },
+    {
+      "src": "/(api|admin|static|media)/(.*)",
+      "dest": "https://petrol-pump-demo-api.onrender.com/$1/$2"
+    },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
