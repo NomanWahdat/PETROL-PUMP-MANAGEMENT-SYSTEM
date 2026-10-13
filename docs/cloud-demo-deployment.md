@@ -85,13 +85,13 @@ Deploy and record the actual HTTPS `onrender.com` URL. Open `/api/v1/health/` an
 
 1. Import the same GitHub repository into Vercel.
 2. Set **Root Directory = `frontend`**, framework **Vite**, build **`npm run build`**, output **`dist`** and install **`npm ci`**. Use supported Node 22 LTS or newer compatible LTS.
-3. Set `RENDER_BACKEND_URL=https://YOUR-ACTUAL-SERVICE.onrender.com` (origin only; no `/api` path) and `VITE_API_BASE_URL=/api/v1`. Select the production environment; preview deployments need their own intentionally configured backend/origin.
+3. Set `VITE_API_BASE_URL=/api/v1`. The static `frontend/vercel.json` points to the deployed `https://petrol-pump-demo-api.onrender.com` backend. If that service URL changes, update the four external destinations in that file and push the change before deploying. Select the production environment; preview deployments need their own intentionally configured backend/origin. The previously documented `RENDER_BACKEND_URL` variable is no longer used and can be removed.
 4. Deploy. Record the actual stable production `vercel.app` URL.
 5. Update Render's `DJANGO_CSRF_TRUSTED_ORIGINS=https://YOUR-ACTUAL-PROJECT.vercel.app` and allowed hosts as above; save/redeploy the backend.
 
-`frontend/vercel.mjs` generates the native external rewrites from `RENDER_BACKEND_URL`: `/api`, `/admin` and `/static` proxy to Render before the SPA fallback. The browser accesses APIs/logos through the **Vercel origin**, preserving host-only session/CSRF cookies. `/media` is forwarded to the backend's 404 route, not exposed as public files. API/admin responses use `no-store`. No Supabase Auth, CORS package or cross-site cookie rewrite is introduced. Keep `VITE_API_BASE_URL=/api/v1`; setting it directly to Render would bypass this design.
+`frontend/vercel.json` declares native external rewrites: `/api`, `/admin` and `/static` proxy to Render before the SPA fallback. The browser accesses APIs/logos through the **Vercel origin**, preserving host-only session/CSRF cookies. `/media` is forwarded to the backend's 404 route, not exposed as public files. API/admin responses use `no-store`. No Supabase Auth, CORS package or cross-site cookie rewrite is introduced. Keep `VITE_API_BASE_URL=/api/v1`; setting it directly to Render would bypass this design.
 
-The config fails clearly if the backend URL is missing or includes credentials/non-HTTPS paths. Vercel supports programmatic `.mjs` configuration; see [programmatic configuration](https://vercel.com/docs/project-configuration/vercel-ts) and [external rewrites](https://vercel.com/docs/routing/rewrites). Secrets/database URLs belong only in Render or the private import prompt, never Vercel's `VITE_` variables.
+The static config replaces the earlier dynamic `.mjs` file after Vercel's new-project importer rejected an unresolved rewrite destination. It includes literal destination URLs, requiring no configuration-time environment evaluation or additional package. See [static configuration](https://vercel.com/docs/project-configuration/vercel-json) and [external rewrites](https://vercel.com/docs/routing/rewrites). Secrets/database URLs belong only in Render or the private import prompt, never Vercel's `VITE_` variables.
 
 ## 5. Verify and share the demo
 

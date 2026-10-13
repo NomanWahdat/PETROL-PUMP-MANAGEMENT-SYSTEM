@@ -178,7 +178,7 @@ The current suite passes all 136 tests on PostgreSQL 14; SQLite passes 128 and s
 
 ## Deployment preparation
 
-For the current demo, use [Vercel frontend + Render backend + Neon data/logos](docs/cloud-demo-deployment.md). Root `render.yaml` and `frontend/vercel.mjs` are prepared; no paid disk is needed because `DJANGO_LOGO_STORAGE=database` keeps small logos in PostgreSQL. The current local data is in a private ignored transfer bundle, with a guarded one-time import and mandatory private Super Admin passwords. Never commit that bundle or `.env`. The existing VPS instructions/templates remain below and in [deployment.md](docs/deployment.md).
+For the current demo, use [Vercel frontend + Render backend + Neon data/logos](docs/cloud-demo-deployment.md). Root `render.yaml` and `frontend/vercel.json` are prepared; no paid disk is needed because `DJANGO_LOGO_STORAGE=database` keeps small logos in PostgreSQL. The current local data is in a private ignored transfer bundle, with a guarded one-time import and mandatory private Super Admin passwords. Never commit that bundle or `.env`. The existing VPS instructions/templates remain below and in [deployment.md](docs/deployment.md).
 
 Keep frontend deployment and backend hosting separate from business logic. Prefer a **same-origin HTTPS reverse proxy**: `/api/v1/*` routes to Django and all other application routes serve the React build. A Vercel frontend with a Railway/Render backend can use this pattern; configure session/CSRF forwarding and browser-route fallback at deployment time. Unrelated frontend/backend domains require a deliberate authentication/CORS/cookie design; simply changing the API URL is insufficient.
 
