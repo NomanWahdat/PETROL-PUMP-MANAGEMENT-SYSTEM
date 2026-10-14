@@ -21,7 +21,7 @@
     },
     {
       "src": "/(api|admin|static|media)/(.*)",
-      "dest": "https://petrol-pump-demo-api.onrender.com/$1/$2"
+      "dest": "https://petrol-pump-demo-api-singapore.onrender.com/$1/$2"
     },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
